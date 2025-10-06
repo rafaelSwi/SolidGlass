@@ -39,13 +39,15 @@ struct SettingsView: View {
                     }
                 }
                 
-                Button {
-                    viewModel.checkForUpdate()
-                } label: {
-                    if viewModel.checkingUpdate {
-                        ProgressView()
-                    } else {
-                        Label(!viewModel.latestVersion.isEmpty ? "updated" : "check_for_updates", systemImage: "checkmark.circle")
+                if (!viewModel.updateAvailable) {
+                    Button {
+                        viewModel.checkForUpdate()
+                    } label: {
+                        if viewModel.checkingUpdate {
+                            ProgressView()
+                        } else {
+                            Label(!viewModel.latestVersion.isEmpty ? "updated" : "check_for_updates", systemImage: "checkmark.circle")
+                        }
                     }
                 }
                 
