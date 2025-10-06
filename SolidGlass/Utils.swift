@@ -18,10 +18,14 @@ final class Utils {
         "com.apple.iBooksX": "warning_nothing_works",
         "com.apple.FaceTime": "warning_weird_ui",
         "com.apple.iWork.Keynote": "warning_weird_ui",
-        "com.apple.iWork.Pages":"warning_required_global",
+        "com.apple.iWork.Pages": "warning_required_global",
         "com.apple.Passwords": "warning_weird_ui",
         "com.apple.mobilephone": "warning_required_global_and_weird_ui",
         "com.apple.podcasts": "warning_nothing_works",
+        "com.apple.dock": "warning_weird_ui",
+        "com.apple.controlcenter": "warning_nothing_works",
+        "com.apple.AddressBook": "warning_required_global",
+        "com.apple.mail": "warning_required_global",
     ]
 
     static func getAllInstalledApps() -> [InstalledApp] {

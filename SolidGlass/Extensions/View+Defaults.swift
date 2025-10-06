@@ -15,14 +15,9 @@ extension View {
             .background(WindowConfigurator { window in
                 guard let window = window else { return }
                 
-                // Remove o botão de fullscreen (verde)
                 window.standardWindowButton(.zoomButton)?.isHidden = true
-                
-                // Permite apenas minimizar e fechar
                 window.styleMask.remove(.resizable)
                 window.styleMask.remove(.fullScreen)
-                
-                // Opcional: força tamanho fixo
                 window.minSize = window.frame.size
                 window.maxSize = window.frame.size
             })
