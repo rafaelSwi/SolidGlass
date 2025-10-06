@@ -1,5 +1,5 @@
 //
-//  GItHubRelease.swift
+//  GitHubRelease.swift
 //  SolidGlass
 //
 //  Created by Rafael Neuwirth Swierczynski on 05/10/25.

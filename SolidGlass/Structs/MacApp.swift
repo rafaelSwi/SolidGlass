@@ -1,15 +1,15 @@
 //
-//  InstalledApp.swift
+//  MacApp.swift
 //  SolidGlass
 //
-//  Created by Rafael Neuwirth Swierczynski on 05/10/25.
+//  Created by Rafael Neuwirth Swierczynski on 06/10/25.
 //
 
 import Foundation
 import SwiftUI
-import AppKit
 
-struct InstalledApp {
+struct MacApp: Identifiable {
+    var id: String { bundleIdentifier ?? path.path }
     let name: String
     let bundleIdentifier: String?
     let path: URL

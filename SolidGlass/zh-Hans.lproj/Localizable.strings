@@ -44,3 +44,16 @@
 "updated" = "已更新";
 "open_download_page" = "打开下载页面";
 "apple_list" = "仅显示 Apple 软件";
+"checking_directory" = "正在检查目录：%@";
+"directory_access_failed" = "无法访问：%@";
+"found_items_in_directory" = "在 %@ 中找到 %d 个项目";
+"reading_app_from_directory" = "正在读取第 %d 个应用，共 %d 个，来自 %@";
+"sorting_apps" = "正在整理应用列表...";
+"loading_completed" = "已找到 %d 个应用程序";
+"restart_could_be_required" = "可能需要重新启动系统以应用更改";
+"main_warning_title" = "如果它不起作用怎么办？";
+"main_warning_description" = "一些最近的 BETA 版本用户报告无法禁用该效果。SolidGlass 使用 Apple 内置的标志来实现禁用功能，如果不起作用，可能是由于操作系统行为的更改。建议等待未来的版本，看看 Apple 将如何处理此问题。";
+"hide_purple_warning" = "隐藏紫色警告";
+"hide" = "隐藏";
+"force_liquid_glass" = "强制启用 Liquid Glass";
+"disable_liquid_glass" = "禁用 Liquid Glass";

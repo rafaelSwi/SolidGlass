@@ -21,6 +21,7 @@ extension View {
                 window.minSize = window.frame.size
                 window.maxSize = window.frame.size
             })
+            .preferredColorScheme(.dark)
     }
     
 }

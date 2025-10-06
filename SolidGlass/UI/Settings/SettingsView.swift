@@ -17,6 +17,7 @@ struct SettingsView: View {
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
     @AppStorage(StorageKeys.appleList) private var appleList = false
+    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
     
     var body: some View {
         VStack {
@@ -76,6 +77,10 @@ struct SettingsView: View {
                     
                     Toggle(isOn: $showBundle) {
                         Text("show_app_bundle")
+                    }
+                    
+                    Toggle(isOn: $hideWarning) {
+                        Text("hide_purple_warning")
                     }
                     
                 }

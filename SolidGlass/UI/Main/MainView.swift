@@ -15,61 +15,75 @@ struct MainView: View {
     
     @AppStorage(StorageKeys.showAppIcons) private var showAppIcons = true
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
+    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
     
     @State private var searchText = ""
-    
     @State private var showingAddAppSheet = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        
+        VStack(spacing: 16) {
             
             HStack {
-                Text("liquid_glass_deactivator")
-                    .font(.title)
-                    .bold()
-                
-                Text("v\(viewModel.appVersion())")
-                    .font(.footnote)
+                VStack(alignment: .leading) {
+                    Text("liquid_glass_deactivator")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Text("v\(viewModel.appVersion())")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
                 
                 Spacer()
                 
-                Button(action: { currentWindow = .settings }) {
-                    Label("settings", systemImage: "gear")
+                HStack(spacing: 12) {
+                    Button(action: { currentWindow = .settings }) {
+                        Label("settings", systemImage: "gear")
+                    }
+                    
+                    
+                    Button(action: { showingAddAppSheet.toggle() }) {
+                        Label("add_app", systemImage: "plus")
+                    }
+                    
                 }
-                
-                Button(action: { showingAddAppSheet.toggle() }) {
-                    Image(systemName: "plus")
-                        .font(.title2)
+            }
+            .padding(.horizontal)
+            
+            
+            Form {
+                Section {
+                    RedToggle(isOn: $viewModel.globalDisabled,
+                              title: NSLocalizedString("disable_globally", comment: ""),
+                              subtitle: String(localized: "restart_could_be_required"),
+                              isLoading: viewModel.isLoading
+                    )
                 }
             }
             
-            HStack {
-                Toggle(isOn: Binding(
-                    get: { viewModel.globalDisabled },
-                    set: { newValue in
-                        viewModel.toggleGlobalSolarium(deactivate: newValue)
+            if (!hideWarning) {
+                Form {
+                    Section {
+                        WarningView(title: "main_warning_title", hoverMessage: "main_warning_description")
+                            .contextMenu {
+                                Button("hide") {
+                                    hideWarning = true;
+                                }
+                            }
                     }
-                )) {
-                    Text("disable_globally")
-                        .font(.headline)
                 }
-                .toggleStyle(SwitchToggleStyle(tint: .blue))
-                .disabled(viewModel.isLoading)
-                .padding()
-                
-                Spacer()
             }
             
             TextField("search", text: $searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
                 .padding(.horizontal)
             
-            Spacer()
-                .frame(height: 20)
-            
             if viewModel.isLoading {
-                ProgressView("loading")
+                Spacer()
+                ProgressView(String(localized: "\(viewModel.loadingDescription)"))
                     .padding()
+                Spacer()
             } else {
                 List {
                     ForEach(viewModel.filteredApps(searchText), id: \.bundleIdentifier) { app in
@@ -83,10 +97,12 @@ struct MainView: View {
                 }
             }
         }
-        .padding()
+        .padding(.vertical)
         .frame(minWidth: 600, minHeight: 600)
         .sheet(isPresented: $showingAddAppSheet) {
             AddAppSheet(viewModel: viewModel)
         }
     }
+    
 }
+

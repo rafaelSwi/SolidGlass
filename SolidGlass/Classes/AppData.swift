@@ -9,5 +9,5 @@ import Foundation
 import Combine
 
 class AppData: ObservableObject {
-    @Published var apps: [InstalledApp] = []
+    @Published var apps: [MacApp] = []
 }

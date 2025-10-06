@@ -17,7 +17,7 @@
 "show_btc_address" = "Show BTC Address";
 "copy" = "Copy";
 "show_app_icons" = "Show Icons";
-"show_app_bundle" = "Show Bundle";
+"show_app_bundle" = "Show Bundle Identifier";
 "open" = "Open";
 "restart" = "Restart";
 "show_on_finder" = "Show on Finder";
@@ -26,7 +26,7 @@
 "settings" = "Settings";
 "bundle_identifier" = "Bundle Identifier";
 "drag_app_here" = "Drag an app here";
-"add_app" = "Add App";
+"add_app" = "Add";
 "cancel" = "Cancel";
 "add" = "Add";
 "invalid_app_bundle" = "Invalid app bundle";
@@ -44,3 +44,16 @@
 "updated" = "Updated";
 "open_download_page" = "Open Download Page";
 "apple_list" = "Only show Apple software";
+"checking_directory" = "Checking directory: %@";
+"directory_access_failed" = "Failed to access: %@";
+"found_items_in_directory" = "Found %d items in %@";
+"reading_app_from_directory" = "Reading app %d of %d in %@";
+"sorting_apps" = "Sorting app list...";
+"loading_completed" = "%d applications found";
+"restart_could_be_required" = "System restart could be required to apply changes";
+"main_warning_title" = "What if it's not working?";
+"main_warning_description" = "Some users of recent BETA versions have reported that it is not possible to disable the effect. SolidGlass uses a built-in Apple flag to disable the effect, and if it is not working, it may be due to changes in the operating system’s behavior. It is recommended to wait for future versions to see how Apple will handle this.";
+"hide_purple_warning" = "Hide purple warning";
+"hide" = "Hide";
+"force_liquid_glass" = "Force Liquid Glass";
+"disable_liquid_glass" = "Disable Liquid Glass";
