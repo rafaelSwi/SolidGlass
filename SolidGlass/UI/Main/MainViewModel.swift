@@ -27,7 +27,6 @@ final class MainViewModel: ObservableObject {
            "com.apple.apps.launcher": "warning_disabled_effect",
            "com.apple.iBooksX": "warning_nothing_works",
            "com.apple.FaceTime": "warning_weird_ui",
-           "com.apple.iWork.Keynote": "warning_weird_ui",
            "com.apple.iWork.Pages": "warning_required_global",
            "com.apple.Passwords": "warning_weird_ui",
            "com.apple.mobilephone": "warning_required_global_and_weird_ui",
@@ -36,6 +35,7 @@ final class MainViewModel: ObservableObject {
            "com.apple.controlcenter": "warning_nothing_works",
            "com.apple.AddressBook": "warning_required_global",
            "com.apple.mail": "warning_required_global",
+           "com.apple.Spotlight": "warning_nothing_works",
        ]
 
     var appData: AppData
@@ -76,6 +76,8 @@ final class MainViewModel: ObservableObject {
         let appDirectories = [
             "/Applications",
             "/System/Applications",
+            "/System/Applications/Utilities",
+            "/System/Library/CoreServices",
             "\(NSHomeDirectory())/Applications"
         ]
         

@@ -12,6 +12,7 @@ struct RedToggle: View {
     var title: String
     var subtitle: String
     var isLoading: Bool = false
+    let onToggle: (Bool) -> Void
     
     @State private var isHoveringTitle: Bool = false
 
@@ -76,7 +77,7 @@ struct RedToggle: View {
         .contentShape(Rectangle())
         .onTapGesture {
             if !isLoading {
-                isOn.toggle()
+                onToggle(!isOn)
             }
         }
         .animation(.easeInOut(duration: 0.25), value: isOn)

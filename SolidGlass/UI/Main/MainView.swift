@@ -57,7 +57,8 @@ struct MainView: View {
                     RedToggle(isOn: $viewModel.globalDisabled,
                               title: NSLocalizedString("disable_globally", comment: ""),
                               subtitle: String(localized: "restart_could_be_required"),
-                              isLoading: viewModel.isLoading
+                              isLoading: viewModel.isLoading,
+                              onToggle: { value in viewModel.toggleGlobalSolarium(deactivate: value) }
                     )
                 }
             }
@@ -66,11 +67,6 @@ struct MainView: View {
                 Form {
                     Section {
                         WarningView(title: "main_warning_title", hoverMessage: "main_warning_description")
-                            .contextMenu {
-                                Button("hide") {
-                                    hideWarning = true;
-                                }
-                            }
                     }
                 }
             }

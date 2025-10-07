@@ -14,22 +14,25 @@ struct AppRow: View {
     let showIcon: Bool
     
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
+    @AppStorage(StorageKeys.showForceEffect) private var showForceEffect = false
+    
     @State private var showingWarning = false
-
+    
     var body: some View {
-        HStack(spacing: compactMode ? 8 : 12) {
-
+        
+        HStack(spacing: 8) {
+            
             if showIcon {
                 Image(nsImage: app.icon ?? NSImage(named: "unknown")!)
                     .resizable()
-                    .frame(width: compactMode ? 24 : 32, height: compactMode ? 24 : 32)
+                    .frame(width: 24, height: 24)
                     .cornerRadius(6)
             }
             
-            VStack(alignment: .leading, spacing: compactMode ? 2 : 4) {
+            VStack(alignment: .leading, spacing: 2) {
                 HStack {
                     Text(app.name)
-                        .font(compactMode ? .subheadline : .headline)
+                        .font(.subheadline)
                     
                     if let warning = app.warning {
                         Button(action: { showingWarning = true }) {
@@ -45,42 +48,60 @@ struct AppRow: View {
                             )
                         }
                     }
-                }
-                
-                if !compactMode, let bundle = app.bundleIdentifier {
-                    Text(bundle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    if !compactMode, let bundle = app.bundleIdentifier {
+                        Text(bundle)
+                            .lineLimit(1)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 }
             }
             
             Spacer()
             
             if let bundle = app.bundleIdentifier {
-                HStack(spacing: 12) {
-                    Toggle("disable_liquid_glass", isOn: Binding(
+                
+                if (showForceEffect) {
+                    
+                    HStack(spacing: 12) {
+                        Toggle("disable_liquid_glass", isOn: Binding(
+                            get: { viewModel.solariumStates[bundle] ?? false },
+                            set: { newValue in
+                                viewModel.toggleAppSolarium(for: bundle, deactivate: newValue)
+                                viewModel.solariumStates[bundle] = newValue
+                                if autoRestartApp { restartApp(app: app) }
+                            }
+                        ))
+                        .toggleStyle(.checkbox)
+                        
+                        Toggle("force_liquid_glass", isOn: Binding(
+                            get: { viewModel.solariumForcedStates[bundle] ?? false },
+                            set: { newValue in
+                                viewModel.toggleAppForceSolarium(for: bundle, force: newValue)
+                                viewModel.solariumForcedStates[bundle] = newValue
+                                if autoRestartApp { restartApp(app: app) }
+                            }
+                        ))
+                        .toggleStyle(.checkbox)
+                    }
+                } else {
+                    let isDisabled = viewModel.solariumStates[bundle] ?? false
+                    Toggle(isOn: Binding(
                         get: { viewModel.solariumStates[bundle] ?? false },
                         set: { newValue in
                             viewModel.toggleAppSolarium(for: bundle, deactivate: newValue)
                             viewModel.solariumStates[bundle] = newValue
                             if autoRestartApp { restartApp(app: app) }
                         }
-                    ))
-                    .toggleStyle(.checkbox)
-
-                    Toggle("force_liquid_glass", isOn: Binding(
-                        get: { viewModel.solariumForcedStates[bundle] ?? false },
-                        set: { newValue in
-                            viewModel.toggleAppForceSolarium(for: bundle, force: newValue)
-                            viewModel.solariumForcedStates[bundle] = newValue
-                            if autoRestartApp { restartApp(app: app) }
-                        }
-                    ))
-                    .toggleStyle(.checkbox)
+                    )) {
+                        Text(isDisabled ? "disabled" : "default")
+                    }
+                    .toggleStyle(.switch)
+                    .frame(width: 150)
                 }
             }
         }
-        .padding(.vertical, compactMode ? 2 : 4)
+        .padding(.vertical, 2)
         .contextMenu {
             Button("open") { NSWorkspace.shared.open(app.path) }
             Button("restart") { restartApp(app: app) }

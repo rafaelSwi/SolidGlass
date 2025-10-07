@@ -11,4 +11,5 @@ final class StorageKeys {
     static let autoRestartApp = "autoRestartApp";
     static let appleList = "appleList";
     static let hideWarning = "hideWarning";
+    static let showForceEffect = "showForceEffect"
 }

@@ -51,9 +51,12 @@
 "sorting_apps" = "Organizando lista de aplicativos...";
 "loading_completed" = "%d aplicativos encontrados";
 "restart_could_be_required" = "Pode ser necessário reiniciar o sistema para aplicar as alterações";
-"main_warning_title" = "E se não estiver funcionando?";
+"main_warning_title" = "Um aviso para os usuários de macOS BETA";
 "main_warning_description" = "Alguns usuários de versões BETA recentes relataram que não é possível desativar o efeito. O SolidGlass usa uma flag integrada da Apple para realizar a desativação, e caso não esteja funcionando, isso pode ser devido a mudanças no comportamento do sistema operacional.";
 "hide_purple_warning" = "Ocultar alerta na tela inicial";
 "hide" = "Ocultar";
 "force_liquid_glass" = "Forçar Liquid Glass";
 "disable_liquid_glass" = "Desativar Liquid Glass";
+"show_force_liquid_glass" = "Mostrar opção para forçar o Liquid Glass";
+"right_click_to_hide" = "Você pode clicar com o botão direito (ou dois dedos no trackpad) para escondê-lo.";
+"open_github_page" = "Abrir página do Github";

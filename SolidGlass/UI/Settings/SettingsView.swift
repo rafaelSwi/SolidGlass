@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @Environment(\.openURL) var openURL
     @StateObject var viewModel = SettingsViewModel()
     
     @Binding var currentWindow: AppWindow
@@ -18,6 +19,7 @@ struct SettingsView: View {
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
     @AppStorage(StorageKeys.appleList) private var appleList = false
     @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
+    @AppStorage(StorageKeys.showForceEffect) private var showForceEffect = false
     
     var body: some View {
         VStack {
@@ -48,6 +50,20 @@ struct SettingsView: View {
                             ProgressView()
                         } else {
                             Label(!viewModel.latestVersion.isEmpty ? "updated" : "check_for_updates", systemImage: "checkmark.circle")
+                        }
+                    }
+                    .contextMenu {
+                        Button {
+                            viewModel.checkForUpdate()
+                        } label: {
+                            Label("check_for_updates", systemImage: "magnifyingglass")
+                        }
+                        Button {
+                            if let url = URL(string: "https://github.com/rafaelSwi/SolidGlass") {
+                                openURL(url)
+                            }
+                        } label: {
+                            Label("open_github_page", systemImage: "globe")
                         }
                     }
                 }
@@ -81,6 +97,10 @@ struct SettingsView: View {
                     
                     Toggle(isOn: $hideWarning) {
                         Text("hide_purple_warning")
+                    }
+                    
+                    Toggle(isOn: $showForceEffect) {
+                        Text("show_force_liquid_glass")
                     }
                     
                 }
