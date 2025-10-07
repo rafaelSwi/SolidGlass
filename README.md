@@ -10,3 +10,7 @@ SolidGlass runs terminal commands to disable the Solid Glass effect for specific
 While you could technically do this yourself through the terminal, SolidGlass simplifies the process with an intuitive interface and a collection of practical, easy-to-use features.
 
 <img width="948" height="771" alt="MAIN_IMAGE" src="https://github.com/user-attachments/assets/2997fa84-cfdf-4f54-a9ee-d302d5308819" />
+
+## For macOS BETA users
+
+Disabling Liquid Glass isn't working in newer versions of macOS Tahoe beta. We don't know if this is a glitch caused by a system malfunction (which is quite possible), Apple changing how the disabling command works, or removing it completely. We'll just have to wait for the stable version to be released.
