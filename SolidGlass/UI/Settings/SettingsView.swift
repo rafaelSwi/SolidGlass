@@ -18,7 +18,7 @@ struct SettingsView: View {
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
     @AppStorage(StorageKeys.appleList) private var appleList = false
-    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
+    @AppStorage(StorageKeys.hideDeprecatedWarning) private var hideWarning = false
     @AppStorage(StorageKeys.showForceEffect) private var showForceEffect = false
     
     var body: some View {
@@ -96,7 +96,7 @@ struct SettingsView: View {
                     }
                     
                     Toggle(isOn: $hideWarning) {
-                        Text("hide_purple_warning")
+                        Text("hide_deprecated_warning")
                     }
                     
                     Toggle(isOn: $showForceEffect) {

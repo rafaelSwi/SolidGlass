@@ -51,12 +51,12 @@
 "sorting_apps" = "Organizando lista de aplicaciones...";
 "loading_completed" = "%d aplicaciones encontradas";
 "restart_could_be_required" = "Puede ser necesario reiniciar el sistema para aplicar los cambios";
-"main_warning_title" = "Una advertencia para los usuarios de macOS BETA";
-"main_warning_description" = "Algunos usuarios de versiones BETA recientes han informado que no es posible desactivar el efecto. SolidGlass utiliza una bandera integrada de Apple para realizar la desactivación, y si no está funcionando, puede deberse a cambios en el comportamiento del sistema operativo.";
-"hide_purple_warning" = "Ocultar alerta en la pantalla inicial";
 "hide" = "Ocultar";
 "force_liquid_glass" = "Forzar Liquid Glass";
 "disable_liquid_glass" = "Desactivar Liquid Glass";
 "show_force_liquid_glass" = "Mostrar opción para forzar Liquid Glass";
 "right_click_to_hide" = "Puedes hacer clic derecho (o tocar con dos dedos en el trackpad) en esta alerta para ocultarla.";
 "open_github_page" = "Abrir página de Github";
+"deprecated_warning_title" = "Tahoe 26.0.1 es la última versión compatible";
+"deprecated_warning_body" = "Apple ha eliminado las banderas del sistema que se usaban para desactivar el efecto Liquid Glass, por lo que este software ya no funciona en versiones más recientes. Aún puedes usar el software normalmente si tu sistema es la versión 26.0.1 o anterior. Este software ya no recibirá actualizaciones a menos que Apple vuelva a agregar una nueva bandera del sistema que permita deshabilitar Liquid Glass.";
+"hide_deprecated_warning" = "Ocultar alerta";

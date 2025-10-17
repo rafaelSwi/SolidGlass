@@ -14,6 +14,8 @@ struct SolidGlassApp: App {
     @StateObject private var appData = AppData()
     @StateObject private var viewModel: MainViewModel
     
+    @AppStorage(StorageKeys.hideDeprecatedWarning) private var hideWarning = false
+    
     init() {
         let appData = AppData()
         _appData = StateObject(wrappedValue: appData)

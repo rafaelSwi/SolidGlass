@@ -15,7 +15,7 @@ struct MainView: View {
     
     @AppStorage(StorageKeys.showAppIcons) private var showAppIcons = true
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
-    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
+    @AppStorage(StorageKeys.hideDeprecatedWarning) private var hideWarning = false
     
     @State private var searchText = ""
     @State private var showingAddAppSheet = false
@@ -66,7 +66,7 @@ struct MainView: View {
             if (!hideWarning) {
                 Form {
                     Section {
-                        WarningView(title: "main_warning_title", hoverMessage: "main_warning_description")
+                        WarningView(title: "deprecated_warning_title", hoverMessage: "deprecated_warning_body")
                     }
                 }
             }

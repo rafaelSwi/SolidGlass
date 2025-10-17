@@ -15,7 +15,7 @@ struct WarningView: View {
     
     @State private var isHovering: Bool = false
     
-    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
+    @AppStorage(StorageKeys.hideDeprecatedWarning) private var hideWarning = false
     
     var body: some View {
         VStack {
@@ -25,7 +25,7 @@ struct WarningView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 16, height: 16)
-                    .foregroundColor(Color.purple)
+                    .foregroundColor(Color.red)
                 
                 ZStack(alignment: .leading) {
                     
@@ -53,7 +53,7 @@ struct WarningView: View {
             .padding(.vertical, 6)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.purple.opacity(0.1))
+                    .fill(Color.red.opacity(0.1))
                     .shadow(color: .black.opacity(0.03), radius: 2, x: 0, y: 1)
             )
             .padding(.horizontal, 8)

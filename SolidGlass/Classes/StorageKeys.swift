@@ -10,6 +10,6 @@ final class StorageKeys {
     static let showBundle = "showBundle";
     static let autoRestartApp = "autoRestartApp";
     static let appleList = "appleList";
-    static let hideWarning = "hideWarning";
+    static let hideDeprecatedWarning = "hideDeprecatedWarning";
     static let showForceEffect = "showForceEffect"
 }
