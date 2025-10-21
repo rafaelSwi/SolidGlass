@@ -76,7 +76,7 @@ struct AddAppSheet: View {
             let appName = bundle.localizedInfoDictionary?["CFBundleDisplayName"] as? String ??
                           bundle.infoDictionary?["CFBundleName"] as? String ??
                           url.deletingPathExtension().lastPathComponent
-            let app = MacApp(name: appName, bundleIdentifier: bundle.bundleIdentifier, path: url, icon: NSImage(named: "unknown"), warning: "warning_external_app")
+            let app = MacApp(name: appName, bundleIdentifier: bundle.bundleIdentifier, path: url, icon: NSImage(named: "unknown"))
             
             if !viewModel.appData.apps.contains(where: { $0.path == url }) {
                 viewModel.appData.apps.append(app)

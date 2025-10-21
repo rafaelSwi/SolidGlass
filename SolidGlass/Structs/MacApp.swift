@@ -14,5 +14,4 @@ struct MacApp: Identifiable {
     let bundleIdentifier: String?
     let path: URL
     let icon: NSImage?
-    let warning: LocalizedStringKey?
 }

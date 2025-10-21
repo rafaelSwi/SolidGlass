@@ -17,7 +17,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var latestVersion: String = ""
     @Published var releaseURL: URL? = nil
     
-    func appVersion() -> String {
+    var appVersion: String {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "N/A"
     }
     
@@ -53,7 +53,7 @@ final class SettingsViewModel: ObservableObject {
             if let release = try? JSONDecoder().decode(GitHubRelease.self, from: data) {
                 let latest = release.tag_name.replacingOccurrences(of: "v", with: "")
                 let releaseURL = URL(string: release.html_url)
-                let updateAvailable = self.isVersion(self.appVersion(), olderThan: latest)
+                let updateAvailable = self.isVersion(self.appVersion, olderThan: latest)
                 
                 DispatchQueue.main.async {
                     self.latestVersion = latest

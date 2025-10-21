@@ -14,12 +14,12 @@ struct SettingsView: View {
     
     @Binding var currentWindow: AppWindow
     
-    @AppStorage(StorageKeys.showAppIcons) private var showAppIcons = true
+    @AppStorage(StorageKeys.legacy) private var legacy = false
+    @AppStorage(StorageKeys.hideAppIcons) private var hideAppIcons = true
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
     @AppStorage(StorageKeys.appleList) private var appleList = false
     @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
-    @AppStorage(StorageKeys.showForceEffect) private var showForceEffect = false
     
     var body: some View {
         VStack {
@@ -79,6 +79,17 @@ struct SettingsView: View {
                 
                 VStack(alignment: .leading, spacing: 12) {
                     
+                    Toggle(isOn: $legacy) {
+                        Text("legacy_mode")
+                    }
+                    
+                    Text("legacy_mode_description")
+                        .font(.footnote)
+                        .opacity(0.7)
+                    
+                    Spacer()
+                        .frame(height: 10)
+                    
                     Toggle(isOn: $appleList) {
                         Text("apple_list")
                     }
@@ -87,20 +98,12 @@ struct SettingsView: View {
                         Text("auto_restart_app")
                     }
                     
-                    Toggle(isOn: $showAppIcons) {
-                        Text("show_app_icons")
+                    Toggle(isOn: $hideAppIcons) {
+                        Text("hide_app_icons")
                     }
                     
                     Toggle(isOn: $showBundle) {
                         Text("show_app_bundle")
-                    }
-                    
-                    Toggle(isOn: $hideWarning) {
-                        Text("hide_purple_warning")
-                    }
-                    
-                    Toggle(isOn: $showForceEffect) {
-                        Text("show_force_liquid_glass")
                     }
                     
                 }
