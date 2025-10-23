@@ -6,10 +6,11 @@
 //
 
 final class StorageKeys {
-    static let showAppIcons = "showAppIcons";
+    static let legacy = "legacy";
+    static let acceptedTerms = "acceptTerms";
+    static let hideAppIcons = "hideAppIcons";
     static let showBundle = "showBundle";
     static let autoRestartApp = "autoRestartApp";
     static let appleList = "appleList";
     static let hideWarning = "hideWarning";
-    static let showForceEffect = "showForceEffect"
 }

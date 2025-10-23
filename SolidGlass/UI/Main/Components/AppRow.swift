@@ -13,14 +13,14 @@ struct AppRow: View {
     let compactMode: Bool
     let showIcon: Bool
     
+    @AppStorage(StorageKeys.legacy) private var legacy = false
     @AppStorage(StorageKeys.autoRestartApp) private var autoRestartApp = false
-    @AppStorage(StorageKeys.showForceEffect) private var showForceEffect = false
     
     @State private var showingWarning = false
     
     var body: some View {
         
-        HStack(spacing: 8) {
+        HStack(alignment: .top, spacing: 8) {
             
             if showIcon {
                 Image(nsImage: app.icon ?? NSImage(named: "unknown")!)
@@ -34,20 +34,6 @@ struct AppRow: View {
                     Text(app.name)
                         .font(.subheadline)
                     
-                    if let warning = app.warning {
-                        Button(action: { showingWarning = true }) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundColor(.yellow)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        .alert(isPresented: $showingWarning) {
-                            Alert(
-                                title: Text("warning"),
-                                message: Text(warning),
-                                dismissButton: .default(Text("OK"))
-                            )
-                        }
-                    }
                     if !compactMode, let bundle = app.bundleIdentifier {
                         Text(bundle)
                             .lineLimit(1)
@@ -55,49 +41,43 @@ struct AppRow: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                if !legacy {
+                    FlagToggleGroup(
+                        bundle: app.bundleIdentifier ?? "",
+                        app: app,
+                        autoRestartApp: autoRestartApp,
+                        restartApp: restartApp,
+                        viewModel: viewModel
+                    )
+                }
             }
             
             Spacer()
             
             if let bundle = app.bundleIdentifier {
                 
-                if (showForceEffect) {
-                    
+                if (legacy) {
                     HStack(spacing: 12) {
                         Toggle("disable_liquid_glass", isOn: Binding(
-                            get: { viewModel.solariumStates[bundle] ?? false },
+                            get: { viewModel.solariumFlags[bundle]?[.disableSolarium] ?? false },
                             set: { newValue in
-                                viewModel.toggleAppSolarium(for: bundle, deactivate: newValue)
-                                viewModel.solariumStates[bundle] = newValue
+                                viewModel.toggleFlag(for: bundle, flag: .disableSolarium, active: newValue)
+                                viewModel.solariumFlags[bundle]?[.disableSolarium] = newValue
                                 if autoRestartApp { restartApp(app: app) }
                             }
                         ))
                         .toggleStyle(.checkbox)
-                        
+
                         Toggle("force_liquid_glass", isOn: Binding(
-                            get: { viewModel.solariumForcedStates[bundle] ?? false },
+                            get: { viewModel.solariumFlags[bundle]?[.ignoreSolariumLinkedOnCheck] ?? false },
                             set: { newValue in
-                                viewModel.toggleAppForceSolarium(for: bundle, force: newValue)
-                                viewModel.solariumForcedStates[bundle] = newValue
+                                viewModel.toggleFlag(for: bundle, flag: .ignoreSolariumLinkedOnCheck, active: newValue)
+                                viewModel.solariumFlags[bundle]?[.ignoreSolariumLinkedOnCheck] = newValue
                                 if autoRestartApp { restartApp(app: app) }
                             }
                         ))
                         .toggleStyle(.checkbox)
                     }
-                } else {
-                    let isDisabled = viewModel.solariumStates[bundle] ?? false
-                    Toggle(isOn: Binding(
-                        get: { viewModel.solariumStates[bundle] ?? false },
-                        set: { newValue in
-                            viewModel.toggleAppSolarium(for: bundle, deactivate: newValue)
-                            viewModel.solariumStates[bundle] = newValue
-                            if autoRestartApp { restartApp(app: app) }
-                        }
-                    )) {
-                        Text(isDisabled ? "disabled" : "default")
-                    }
-                    .toggleStyle(.switch)
-                    .frame(width: 150)
                 }
             }
         }

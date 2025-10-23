@@ -71,6 +71,7 @@ struct WarningView: View {
                     .padding(.vertical, 2.5)
             }
         }
+        .frame(height: isHovering ? 140 : 30)
         .contextMenu {
             Button("hide") {
                 hideWarning = true;

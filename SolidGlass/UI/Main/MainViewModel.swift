@@ -11,44 +11,37 @@ import Combine
 
 @MainActor
 final class MainViewModel: ObservableObject {
-
-    @Published var solariumStates: [String: Bool] = [:]
-    @Published var solariumForcedStates: [String: Bool] = [:] // NOVO
+    @Published var solariumFlags: [String: [FlagType: Bool]] = [:]
+    @Published var globalStates: [FlagType: Bool] = [:]
     @Published var isLoading = true
+    @Published var loadingDescription: String = String(localized: "loading")
     @Published var globalDisabled = false
     @Published var globalForced = false
-    @Published var loadingDescription: String = String(localized: "loading")
 
     @AppStorage(StorageKeys.appleList) private var appleList = false
-    
-    private let appWarnings: [String: LocalizedStringKey] = [
-           "com.apple.Safari": "warning_required_global",
-           "com.apple.systempreferences": "warning_required_global",
-           "com.apple.apps.launcher": "warning_disabled_effect",
-           "com.apple.iBooksX": "warning_nothing_works",
-           "com.apple.FaceTime": "warning_weird_ui",
-           "com.apple.iWork.Pages": "warning_required_global",
-           "com.apple.Passwords": "warning_weird_ui",
-           "com.apple.mobilephone": "warning_required_global_and_weird_ui",
-           "com.apple.podcasts": "warning_nothing_works",
-           "com.apple.dock": "warning_weird_ui",
-           "com.apple.controlcenter": "warning_nothing_works",
-           "com.apple.AddressBook": "warning_required_global",
-           "com.apple.mail": "warning_required_global",
-           "com.apple.Spotlight": "warning_nothing_works",
-       ]
 
     var appData: AppData
 
     init(appData: AppData) {
         self.appData = appData
+
         Task {
             if appData.apps.isEmpty {
                 await loadApps()
             }
-            globalDisabled = Self.isGlobalSolariumDisabled()
-            globalForced = Self.isGlobalSolariumForced()
+
+            for flag in FlagType.allCases {
+                let enabled = Self.isFlagEnabled(bundle: "-g", flag: flag)
+                globalStates[flag] = enabled
+            }
+
+            globalDisabled = globalStates[.disableSolarium] ?? false
+            globalForced = globalStates[.ignoreSolariumLinkedOnCheck] ?? false
         }
+    }
+
+    var appVersion: String {
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "N/A"
     }
 
     func filteredApps(_ searchText: String) -> [MacApp] {
@@ -65,12 +58,13 @@ final class MainViewModel: ObservableObject {
         return apps
     }
 
-    func appVersion() -> String {
-        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "N/A"
-    }
-    
-        
     func getAllInstalledApps() -> [MacApp] {
+        
+        @AppStorage(StorageKeys.acceptedTerms) var acceptedTerms = false
+        
+        if (!acceptedTerms) {
+            return []
+        }
         
         let fileManager = FileManager.default
         let appDirectories = [
@@ -80,60 +74,75 @@ final class MainViewModel: ObservableObject {
             "/System/Library/CoreServices",
             "\(NSHomeDirectory())/Applications"
         ]
-        
+
         var apps: [MacApp] = []
-        
+
         for directory in appDirectories {
             loadingDescription = String(format: NSLocalizedString("checking_directory", comment: ""), directory)
-            
+
             let url = URL(fileURLWithPath: directory)
             guard let contents = try? fileManager.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else {
                 loadingDescription = String(format: NSLocalizedString("directory_access_failed", comment: ""), directory)
                 continue
             }
-            
+
             for (index, item) in contents.enumerated() where item.pathExtension == "app" {
                 loadingDescription = String(format: NSLocalizedString("reading_app_from_directory", comment: ""), index + 1, contents.count, directory)
-                
+
                 let bundle = Bundle(url: item)
                 let name = bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
                     ?? item.deletingPathExtension().lastPathComponent
                 let bundleIdentifier = bundle?.bundleIdentifier
                 let icon = NSWorkspace.shared.icon(forFile: item.path)
                 icon.size = NSSize(width: 64, height: 64)
-                
+
                 let app = MacApp(
                     name: name,
                     bundleIdentifier: bundleIdentifier,
                     path: item,
-                    icon: icon,
-                    warning: appWarnings[bundleIdentifier ?? ""]
+                    icon: icon
                 )
-                
+
                 apps.append(app)
             }
         }
-        
+
         loadingDescription = NSLocalizedString("sorting_apps", comment: "")
         let sortedApps = apps.sorted { $0.name.localizedCompare($1.name) == .orderedAscending }
-        
+
         loadingDescription = String(format: NSLocalizedString("loading_completed", comment: ""), sortedApps.count)
         return sortedApps
+    }
+    
+    func restartSolidGlass() {
+        let path = Bundle.main.bundlePath
+        let task = Process()
+        task.launchPath = "/usr/bin/open"
+        task.arguments = [path]
+        task.launch()
+        NSApplication.shared.terminate(nil)
     }
 
     func loadApps() async {
         isLoading = true
         let allApps = getAllInstalledApps()
-
+ 
         await withTaskGroup(of: Void.self) { group in
             for app in allApps {
                 guard let bundle = app.bundleIdentifier else { continue }
+
                 group.addTask {
-                    let disabled = await Self.isAppSolariumDisabled(bundle: bundle)
-                    let forced = await Self.isAppSolariumForced(bundle: bundle)
+                    var flagMap: [FlagType: Bool] = [:]
+
+                    for flag in FlagType.allCases {
+                        let enabled = await Self.isFlagEnabled(bundle: bundle, flag: flag)
+                        flagMap[flag] = enabled
+                    }
+
                     await MainActor.run {
-                        self.solariumStates[bundle] = disabled
-                        self.solariumForcedStates[bundle] = forced
+                        var current = self.solariumFlags[bundle] ?? [:]
+                        current.merge(flagMap) { _, new in new }
+                        self.solariumFlags[bundle] = current
                     }
                 }
             }
@@ -141,62 +150,52 @@ final class MainViewModel: ObservableObject {
 
         await MainActor.run {
             appData.apps = allApps
-            self.isLoading = false
+            isLoading = false
         }
     }
-
-    func toggleAppSolarium(for bundle: String, deactivate: Bool) {
+    
+    func toggleFlag(for bundle: String, flag: FlagType, active: Bool) {
         Task.detached {
-            await Self.runDefaultsCommand(for: bundle, deactivate: deactivate)
+            await Self.runDefaultsCommand(for: bundle, flag: flag, active: active)
         }
-        solariumStates[bundle] = deactivate
+
+        Task { @MainActor in
+            var current = solariumFlags[bundle] ?? [:]
+            current[flag] = active
+            solariumFlags[bundle] = current
+        }
     }
 
-    func toggleAppForceSolarium(for bundle: String, force: Bool) {
+    func toggleGlobalFlag(flag: FlagType, active: Bool) {
         Task.detached {
-            await Self.runDefaultsForceCommand(for: bundle, force: force)
+            await Self.runDefaultsCommand(for: "-g", flag: flag, active: active)
         }
-        solariumForcedStates[bundle] = force
-    }
 
-    func toggleGlobalSolarium(deactivate: Bool) {
-        globalDisabled = deactivate
-        Task.detached {
-            await Self.runDefaultsCommand(for: "-g", deactivate: deactivate)
+        Task { @MainActor in
+            globalStates[flag] = active
+            if flag == .disableSolarium { globalDisabled = active }
+            if flag == .ignoreSolariumLinkedOnCheck { globalForced = active }
         }
     }
 
-    func toggleGlobalForceSolarium(force: Bool) {
-        globalForced = force
-        Task.detached {
-            await Self.runDefaultsForceCommand(for: "-g", force: force)
-        }
+    func toggleGlobalSolarium(active: Bool) {
+        toggleGlobalFlag(flag: .disableSolarium, active: active)
     }
 
-    static func runDefaultsCommand(for bundle: String, deactivate: Bool) {
+    static func runDefaultsCommand(for bundle: String, flag: FlagType, active: Bool) {
         let process = Process()
         process.launchPath = "/usr/bin/defaults"
         process.arguments = [
-            "write", bundle, "com.apple.SwiftUI.DisableSolarium", "-bool", deactivate ? "YES" : "NO"
+            "write", bundle, "com.apple.SwiftUI.\(flag.rawValue)", "-bool", active ? "YES" : "NO"
         ]
         try? process.run()
         process.waitUntilExit()
     }
 
-    static func runDefaultsForceCommand(for bundle: String, force: Bool) {
+    static func isFlagEnabled(bundle: String, flag: FlagType) -> Bool {
         let process = Process()
         process.launchPath = "/usr/bin/defaults"
-        process.arguments = [
-            "write", bundle, "com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck", "-bool", force ? "YES" : "NO"
-        ]
-        try? process.run()
-        process.waitUntilExit()
-    }
-
-    static func isAppSolariumDisabled(bundle: String) -> Bool {
-        let process = Process()
-        process.launchPath = "/usr/bin/defaults"
-        process.arguments = ["read", bundle, "com.apple.SwiftUI.DisableSolarium"]
+        process.arguments = ["read", bundle, "com.apple.SwiftUI.\(flag.rawValue)"]
 
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -208,30 +207,5 @@ final class MainViewModel: ObservableObject {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         guard let output = String(data: data, encoding: .utf8) else { return false }
         return output.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "1"
-    }
-
-    static func isAppSolariumForced(bundle: String) -> Bool {
-        let process = Process()
-        process.launchPath = "/usr/bin/defaults"
-        process.arguments = ["read", bundle, "com.apple.SwiftUI.IgnoreSolariumLinkedOnCheck"]
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = pipe
-
-        try? process.run()
-        process.waitUntilExit()
-
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        guard let output = String(data: data, encoding: .utf8) else { return false }
-        return output.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "1"
-    }
-
-    static func isGlobalSolariumDisabled() -> Bool {
-        return isAppSolariumDisabled(bundle: "-g")
-    }
-
-    static func isGlobalSolariumForced() -> Bool {
-        return isAppSolariumForced(bundle: "-g")
     }
 }
