@@ -68,8 +68,10 @@ struct SettingsView: View {
                     }
                 }
                 
-                Button(action: { currentWindow = .donate }) {
-                    Label("donate", systemImage: "hand.thumbsup.circle")
+                if (legacy) {
+                    Button(action: { currentWindow = .donate }) {
+                        Label("donate", systemImage: "hand.thumbsup.circle")
+                    }
                 }
                 
             }
@@ -104,6 +106,10 @@ struct SettingsView: View {
                     
                     Toggle(isOn: $showBundle) {
                         Text("show_app_bundle")
+                    }
+                    
+                    Toggle(isOn: $hideWarning) {
+                        Text("hide_warning")
                     }
                     
                 }

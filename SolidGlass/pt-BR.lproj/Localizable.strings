@@ -67,3 +67,6 @@
 "agree" = "Concordar";
 "disagree" = "Discordar";
 "you_accepted_the_terms" = "Você aceitou os termos de uso";
+"hide_warning" = "Esconder alerta";
+"main_warning_title" = "Não é mais possível desativar o Liquid Glass";
+"main_warning_body" = "A nova atualização do macOS removeu a flag do sistema que era usada para desativar o Liquid Glass, e agora não é mais possível desativá-lo. O desenvolvedor entende que existem outros métodos para desativar o SolidGlass, mas essas abordagens exigem modificações muito mais invasivas dentro dos próprios aplicativos e estão longe de ser tão simples ou rápidas quanto antes. O SolidGlass foi atualizado para incluir flags relacionadas ao Liquid Glass, como uma flag para forçar o efeito, mas infelizmente, a flag para desativar o efeito foi removida. A menos que a Apple reintroduza essa flag ou forneça um mecanismo semelhante, o aplicativo não receberá mais atualizações e pode ser considerado um software morto. Se você ainda estiver usando o macOS versão 26.0.1 e quiser desativar o efeito Liquid Glass, pode ativar o Modo Legado (ou \"Legacy\") nas configurações para continuar usando o SolidGlass normalmente.";

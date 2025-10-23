@@ -17,6 +17,7 @@ struct MainView: View {
     @AppStorage(StorageKeys.hideAppIcons) private var hideAppIcons = true
     @AppStorage(StorageKeys.showBundle) private var showBundle = false
     @AppStorage(StorageKeys.acceptedTerms) private var acceptedTerms = false
+    @AppStorage(StorageKeys.hideWarning) private var hideWarning = false
     
     @State private var searchText = ""
     @State private var showingAddAppSheet = false
@@ -74,6 +75,15 @@ struct MainView: View {
                             )
                         }
                     }
+                }
+                
+                if (!hideWarning && acceptedTerms) {
+                    WarningView(title: "main_warning_title", hoverMessage: "main_warning_body")
+                        .contextMenu {
+                            Button("hide") {
+                                hideWarning = true
+                            }
+                        }
                 }
                 
                 TextField("search", text: $searchText)

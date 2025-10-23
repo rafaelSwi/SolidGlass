@@ -67,3 +67,6 @@
 "agree" = "Zgadzam się";
 "disagree" = "Nie zgadzam się";
 "you_accepted_the_terms" = "Zaakceptowałeś regulamin";
+"hide_warning" = "Ukryj alert";
+"main_warning_title" = "Nie można już wyłączyć Liquid Glass";
+"main_warning_body" = "Nowa aktualizacja macOS usunęła flagę systemową, która była używana do wyłączania Liquid Glass, i nie ma już możliwości wyłączenia tego efektu. Deweloper rozumie, że istnieją inne sposoby wyłączenia SolidGlass, ale te metody wymagają znacznie bardziej złożonych modyfikacji w samych aplikacjach i są dalekie od prostoty i szybkości wcześniejszego rozwiązania. SolidGlass został zaktualizowany o flagi związane z Liquid Glass, takie jak flaga wymuszająca efekt, ale niestety flaga wyłączająca efekt została usunięta. Dopóki Apple nie przywróci tej flagi lub nie zapewni podobnego mechanizmu, aplikacja nie będzie już aktualizowana i można ją uznać za martwe oprogramowanie. Jeśli nadal używasz macOS w wersji 26.0.1 i chcesz wyłączyć efekt Liquid Glass, możesz włączyć tryb Legacy w ustawieniach, aby nadal normalnie korzystać z SolidGlass.";

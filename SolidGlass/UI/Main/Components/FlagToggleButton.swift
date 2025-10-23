@@ -47,6 +47,12 @@ struct FlagToggleButton: View {
                         .font(.callout)
                 }
                 
+                if flag == .ignoreSolariumLinkedOnCheck {
+                    Text("force_liquid_glass")
+                        .foregroundStyle(enabled ? .blue : .gray)
+                        .font(.callout)
+                }
+                
                 Spacer()
                 
                 Text(LocalizedStringKey(enabled ? "enabled" : "disabled"))

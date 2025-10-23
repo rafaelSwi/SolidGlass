@@ -7,7 +7,7 @@
 
 final class StorageKeys {
     static let legacy = "legacy";
-    static let acceptedTerms = "termsOk";
+    static let acceptedTerms = "acceptTerms";
     static let hideAppIcons = "hideAppIcons";
     static let showBundle = "showBundle";
     static let autoRestartApp = "autoRestartApp";

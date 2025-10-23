@@ -67,3 +67,6 @@
 "agree" = "同意";
 "disagree" = "不同意";
 "you_accepted_the_terms" = "您已接受使用条款";
+"hide_warning" = "隐藏警报";
+"main_warning_title" = "无法再禁用 Liquid Glass";
+"main_warning_body" = "新的 macOS 更新已删除用于禁用 Liquid Glass 的系统标志，现在无法再关闭该效果。开发者理解还有其他方法可以禁用 SolidGlass，但这些方法需要在应用程序内部进行更复杂的修改，远不如以前那样简单或快捷。SolidGlass 已更新以包含与 Liquid Glass 相关的标志，例如强制启用效果的标志，但不幸的是，用于禁用效果的标志已被删除。除非 Apple 重新引入该标志或提供类似机制，否则该应用将不再收到更新，可视为已停止维护的软件。如果您仍在使用 macOS 26.0.1 版本并希望禁用 Liquid Glass 效果，可以在设置中启用旧版模式，以继续正常使用 SolidGlass。";

@@ -66,4 +66,7 @@
 "terms_of_use" = "Terms of use";
 "agree" = "Agree";
 "disagree" = "Disagree";
+"hide_warning" = "Hide warning";
 "you_accepted_the_terms" = "You have accepted the terms of use";
+"main_warning_title" = "It is no longer possible to disable Liquid Glass";
+"main_warning_body" = "The new macOS update has removed the system flag that was used to disable Liquid Glass, and it is no longer possible to turn off the effect. The developer understands that there are other methods to disable SolidGlass, but these approaches require much more complex modifications within the apps themselves and are far from being as simple or quick as before. SolidGlass has been updated to include flags related to Liquid Glass, such as a flag to force the effect, but unfortunately, the flag to disable the effect has been removed. Unless Apple reintroduces this flag or provides a similar mechanism, the app will no longer receive updates and can effectively be considered dead software. If you are still using macOS version 26.0.1 and wish to disable the Liquid Glass effect, you can enable Legacy Mode in the settings to continue using SolidGlass normally.";
